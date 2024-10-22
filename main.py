@@ -1,8 +1,4 @@
 import frontend
-from frontend import enviar_datos
-
-
-fin = "si"
 
 dniLista = []
 apellidoLista = []
@@ -14,49 +10,30 @@ montoLista = []
 fechaDeclararLista = []
 origenLista = []
 
-def encontrarmax(edadLista):
-    maximo = edadLista[0]
-    for edad in edadLista:
-        if edad > maximo:
-            maximo = edad
-    return maximo
- 
-def encontrarmin(edadLista):
-    minimo = edadLista[0]
-    for edad in edadLista:
-        if edad < minimo:
-            minimo = edad
-    return minimo
-
-def promedioedades(edadLista):
-    suma = 0
-    for edad in edadLista:
-        suma += edad
-    promedio = (suma/len(edadLista))
-    return promedio
-
+# Nueva función que registra los datos
 def registrardatos():
-    dni, apellido, nombre, edad, fechaDeNacimiento, profesion, monto, fechaDeclarar, origen = frontend.enviar_datos
-    dniLista.append(dni)
-    apellidoLista.append(apellido)
-    nombreLista.append(nombre)
-    edadLista.append(edad)
-    fechaDeNacimientoLista.append(fechaDeNacimiento)
-    profesionLista.append(profesion)
-    montoLista.append(monto)
-    fechaDeclararLista.append(fechaDeclarar)
-    origenLista.append(origen)
-    return dniLista, apellidoLista, nombreLista, edadLista, fechaDeNacimientoLista, profesionLista, montoLista, fechaDeclararLista, origenLista
+    datos = frontend.enviar_datos()
+    if datos:  # Si se retornan datos válidos (es decir, no hubo error)
+        dni, apellido, nombre, edad, fechaDeNacimiento, profesion, monto, fechaDeclarar, origen = datos
+        dniLista.append(dni)
+        apellidoLista.append(apellido)
+        nombreLista.append(nombre)
+        edadLista.append(edad)
+        fechaDeNacimientoLista.append(fechaDeNacimiento)
+        profesionLista.append(profesion)
+        montoLista.append(monto)
+        fechaDeclararLista.append(fechaDeclarar)
+        origenLista.append(origen)
 
+# Muestra estadísticas al finalizar la aplicación
+def mostrar_estadisticas():
+    if edadLista:
+        print(f"La edad máxima registrada es {max(edadLista)}")
+        print(f"La edad minima registrada es {min(edadLista)}")
+        print(f"El promedio de edades registradas es de {sum(edadLista) / len(edadLista)}")
+        print(f"La cantidad de personas registradas es {len(dniLista)}")
+    else:
+        print("No se ha registrado ninguna edad.")
 
-while fin == "si":
-    registrardatos()
-    fin = input("¿Quiere realizar otra declaración? (Ingrese 'si' para continuar o 'no' para finalizar): ").lower()
-
-print(f"La edad máxima registrada es {encontrarmax(edadLista)}")
-print(f"La edad minima registrada es {encontrarmin(edadLista)}")
-print(f"El promedio de edades regsitradas es de {promedioedades(edadLista)}")
-cantidad = len(dniLista)
-print("La cantidad de personas registradas es", cantidad )
-
-   
+frontend.ventana.protocol("WM_DELETE_WINDOW", lambda: [mostrar_estadisticas(), frontend.ventana.destroy()])
+frontend.ventana.mainloop()

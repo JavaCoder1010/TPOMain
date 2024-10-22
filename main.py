@@ -1,5 +1,8 @@
-fin = "si"
+import frontend
+from frontend import enviar_datos
 
+
+fin = "si"
 
 dniLista = []
 apellidoLista = []
@@ -33,25 +36,17 @@ def promedioedades(edadLista):
     return promedio
 
 def registrardatos():
-    dni = (input("Ingrese su DNI: "))
+    dni, apellido, nombre, edad, fechaDeNacimiento, profesion, monto, fechaDeclarar, origen = frontend.enviar_datos
     dniLista.append(dni)
-    apellido = input("Ingrese su apellido: ")
     apellidoLista.append(apellido)
-    nombre = input("Ingrese su nombre: ")
     nombreLista.append(nombre)
-    edad = (int(input("Ingrese su edad: ")))
     edadLista.append(edad)
-    fechaDeNacimiento = input("Ingrese su fecha de nacimiento (DD/MM/YY): ")
     fechaDeNacimientoLista.append(fechaDeNacimiento)
-    profesion = input("Indique su profesión: ")
     profesionLista.append(profesion)
-    monto = int(input("Indique el monto a declarar (en dolares): $"))
     montoLista.append(monto)
-    fechaDeclarar = input("Indique la fecha en la cual está declarando sus fondos (DD/MM/YY): ")
     fechaDeclararLista.append(fechaDeclarar)
-    origen = input("Indique el origen de sus fondos: ")
     origenLista.append(origen)
-    return edadLista
+    return dniLista, apellidoLista, nombreLista, edadLista, fechaDeNacimientoLista, profesionLista, montoLista, fechaDeclararLista, origenLista
 
 
 while fin == "si":

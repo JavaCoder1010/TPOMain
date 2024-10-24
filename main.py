@@ -24,16 +24,12 @@ def registrardatos():
         montoLista.append(monto)
         fechaDeclararLista.append(fechaDeclarar)
         origenLista.append(origen)
+        
+        # Limpiar el formulario
+        frontend.limpiar_formulario()
 
-# Muestra estadísticas al finalizar la aplicación
-def mostrar_estadisticas():
-    if edadLista:
-        print(f"La edad máxima registrada es {max(edadLista)}")
-        print(f"La edad minima registrada es {min(edadLista)}")
-        print(f"El promedio de edades registradas es de {sum(edadLista) / len(edadLista)}")
-        print(f"La cantidad de personas registradas es {len(dniLista)}")
-    else:
-        print("No se ha registrado ninguna edad.")
 
-frontend.ventana.protocol("WM_DELETE_WINDOW", lambda: [mostrar_estadisticas(), frontend.ventana.destroy()])
+
+# Asignar la función al botón "Enviar"
+frontend.boton_enviar.config(command=registrardatos)
 frontend.ventana.mainloop()

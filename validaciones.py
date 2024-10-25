@@ -1,3 +1,5 @@
+from datetime import datetime
+
 def separar_por_guiones(fecha_str):
     componentes = []
     parte = ''
@@ -27,7 +29,8 @@ def es_fecha_valida(fecha_str, formato='%d-%m-%Y'):
         mes = int(mes_str)
         año = int(año_str)
         
-        if año < 1900 or año > 2025:
+        hoy = datetime.today()
+        if año < hoy.year - 100 or año > hoy.year +5:
             return False
         if 1 <= mes <= 12:
             # Días en cada mes, sin considerar bisiestos

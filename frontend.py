@@ -1,5 +1,5 @@
-from datetime import datetime
 import tkinter as tk
+from tkinter import messagebox  # Importamos messagebox para los alertas
 import manejo_errores
 
 def enviar_datos():
@@ -13,13 +13,14 @@ def enviar_datos():
     fechaDeclarar = entry_fechaDeclarar.get()
     origen = entry_origen.get()
 
-    # Validar datos usando el archivo de manejo_errores
+    # VALIDACION DE DATOS en manejo_errores.py
     datos = manejo_errores.validar_datos(dni, nombre, apellido, edad, fechaDeNacimiento, profesion, monto, fechaDeclarar, origen)
 
     if datos:
-        limpiar_formulario()
-        tk.messagebox.showinfo("Éxito", "Datos enviados correctamente.")
-
+        messagebox.showinfo("Registro exitoso", "Contribuyente registrado exitosamente.")
+        return dni, apellido, nombre, edad, fechaDeNacimiento, profesion, monto, fechaDeclarar, origen
+    else:
+        return None
 
 def limpiar_formulario():
     entry_dni.delete(0, tk.END)
@@ -53,7 +54,7 @@ tk.Label(ventana, text="Edad:").pack(pady=5)
 entry_edad = tk.Entry(ventana, width=30)
 entry_edad.pack()
 
-tk.Label(ventana, text="Fecha de Nacimiento (dd-mm-aaaa):").pack(pady=5)
+tk.Label(ventana, text="Fecha de Nacimiento:\n(dd-mm-aaaa)").pack(pady=5)
 entry_fechaDeNacimiento = tk.Entry(ventana, width=30)
 entry_fechaDeNacimiento.pack()
 
@@ -65,7 +66,7 @@ tk.Label(ventana, text="Monto:").pack(pady=5)
 entry_monto = tk.Entry(ventana, width=30)
 entry_monto.pack()
 
-tk.Label(ventana, text="Fecha en la que declara sus fondos (dd-mm-aaaa):").pack(pady=5)
+tk.Label(ventana, text="Fecha en la que declara sus fondos:\n(dd-mm-aaaa)").pack(pady=5)
 entry_fechaDeclarar = tk.Entry(ventana, width=30)
 entry_fechaDeclarar.pack()
 
@@ -73,13 +74,18 @@ tk.Label(ventana, text="Origen de sus fondos:").pack(pady=5)
 entry_origen = tk.Entry(ventana, width=30)
 entry_origen.pack()
 
-# Botón para enviar los datos
+# BOTON ENVIAR
 boton_enviar = tk.Button(ventana, text="Enviar", command=enviar_datos)
 boton_enviar.pack(pady=10)
 
-# Botón para salir del programa
-boton_salir = tk.Button(ventana, text="Salir", command=ventana.destroy)
-boton_salir.pack(pady=10)
+# BOTON SALIR
+def agregar_boton_salir():
+    boton_salir = tk.Button(ventana, text="Salir", command=ventana.destroy)
+    boton_salir.pack(pady=10)
+    
+def mostrar_datos(funcion_mostrar, dniLista, apellidoLista, nombreLista, edadLista, fechaDeNacimientoLista, profesionLista, montoLista, fechaDeclararLista, origenLista):
+    funcion_mostrar(dniLista, apellidoLista, nombreLista, edadLista, fechaDeNacimientoLista, profesionLista, montoLista, fechaDeclararLista, origenLista)
 
-# Ejecutar la ventana
-ventana.mainloop()
+def configurar_boton_mostrar(funcion_mostrar, dniLista, apellidoLista, nombreLista, edadLista, fechaDeNacimientoLista, profesionLista, montoLista, fechaDeclararLista, origenLista):
+    boton_mostrar = tk.Button(ventana, text="Mostrar Datos", command=lambda: mostrar_datos(funcion_mostrar, dniLista, apellidoLista, nombreLista, edadLista, fechaDeNacimientoLista, profesionLista, montoLista, fechaDeclararLista, origenLista))
+    boton_mostrar.pack(pady=10)

@@ -1,11 +1,28 @@
+def separar_por_guiones(fecha_str):
+    componentes = []
+    parte = ''
+    
+    for caracter in fecha_str:
+        if caracter == '-':
+            componentes.append(parte)
+            parte = ''
+        else:
+            parte += caracter
+    
+    componentes.append(parte)
+    return componentes
+
 def es_fecha_valida(fecha_str, formato='%d-%m-%Y'):
     if formato == '%d-%m-%Y':
-        componentes = fecha_str.split('-')
+        componentes = separar_por_guiones(fecha_str)
         if len(componentes) != 3:
             return False
         dia_str, mes_str, año_str = componentes
-        if not (dia_str.isdigit() and mes_str.isdigit() and año_str.isdigit()):
-            return False
+        for s in [dia_str, mes_str, año_str]:
+            for c in s:
+                if c < '0' or c > '9':
+                    return False
+                
         dia = int(dia_str)
         mes = int(mes_str)
         año = int(año_str)
@@ -57,11 +74,11 @@ def es_string_valido(campo):
 
     letras_mayusculas = [
         'A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K', 'L', 'M',
-        'N', 'O', 'P', 'Q', 'R', 'S', 'T', 'U', 'V', 'W', 'X', 'Y', 'Z'
+        'N', 'Ñ', 'O', 'P', 'Q', 'R', 'S', 'T', 'U', 'V', 'W', 'X', 'Y', 'Z'
     ]
     letras_minusculas = [
         'a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'i', 'j', 'k', 'l', 'm',
-        'n', 'o', 'p', 'q', 'r', 's', 't', 'u', 'v', 'w', 'x', 'y', 'z'
+        'n', 'ñ', 'o', 'p', 'q', 'r', 's', 't', 'u', 'v', 'w', 'x', 'y', 'z'
     ]
 
     for caracter in campo:
@@ -79,4 +96,21 @@ def es_string_valido(campo):
         if not es_letra:
             return False
         
+    return True
+
+def es_edad_valida(edad):
+    numeros = ['0', '1', '2', '3', '4', '5', '6', '7', '8', '9']
+    es_numero = True
+    for caracter in str(edad):
+        if caracter not in numeros:
+            es_numero = False
+            break
+    if not es_numero:
+        return False
+    
+    edad = int(edad)
+    
+    if edad < 18 or edad > 100:
+        return False
+    
     return True

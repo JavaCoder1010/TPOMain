@@ -1,4 +1,5 @@
 import frontend
+import ver_datos
 
 dniLista = []
 apellidoLista = []
@@ -10,7 +11,6 @@ montoLista = []
 fechaDeclararLista = []
 origenLista = []
 
-# Nueva función que registra los datos
 def registrardatos():
     datos = frontend.enviar_datos()
     if datos:  # Si se retornan datos válidos (es decir, no hubo error)
@@ -24,12 +24,12 @@ def registrardatos():
         montoLista.append(monto)
         fechaDeclararLista.append(fechaDeclarar)
         origenLista.append(origen)
-        
-        # Limpiar el formulario
+       
+        # Limpiar el formulario después de registrar los datos
         frontend.limpiar_formulario()
 
-
-
-# Asignar la función al botón "Enviar"
 frontend.boton_enviar.config(command=registrardatos)
+frontend.configurar_boton_mostrar(ver_datos.mostrar_datos, dniLista, apellidoLista, nombreLista, edadLista, fechaDeNacimientoLista, profesionLista, montoLista, fechaDeclararLista, origenLista)
+frontend.agregar_boton_salir()
+
 frontend.ventana.mainloop()

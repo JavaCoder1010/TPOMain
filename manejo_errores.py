@@ -1,5 +1,5 @@
-from tkinter import messagebox
 import validaciones
+from tkinter import messagebox
 from datetime import datetime
 
 def validar_datos(dni, nombre, apellido, edad, fechaDeNacimiento, profesion, monto, fechaDeclarar, origen):
@@ -12,7 +12,7 @@ def validar_datos(dni, nombre, apellido, edad, fechaDeNacimiento, profesion, mon
     elif not validaciones.es_string_valido(nombre):
         messagebox.showwarning("Error", "El nombre debe ser una cadena de texto válida.")
         return None
-    elif not edad.isdigit():
+    elif not validaciones.es_edad_valida(edad):
         messagebox.showwarning("Error", "La edad debe ser un número.")
         return None
     elif not fechaDeNacimiento:

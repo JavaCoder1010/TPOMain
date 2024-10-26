@@ -1,35 +1,28 @@
 import frontend
-import ver_datos
+from listas import dniLista, apellidoLista, nombreLista, edadLista, fechaDeNacimientoLista, profesionLista, montoLista, fechaDeclararLista, origenLista, bienesArgentinasLista, bienesExterioresLista
 
-dniLista = []
-apellidoLista = []
-nombreLista = []
-edadLista = []
-fechaDeNacimientoLista = []
-profesionLista = []
-montoLista = []
-fechaDeclararLista = []
-origenLista = []
-
-def registrardatos():
+def registrar_datos():
     datos = frontend.enviar_datos()
-    if datos:  # Si se retornan datos válidos (es decir, no hubo error)
-        dni, apellido, nombre, edad, fechaDeNacimiento, profesion, monto, fechaDeclarar, origen = datos
-        dniLista.append(dni)
-        apellidoLista.append(apellido)
-        nombreLista.append(nombre)
-        edadLista.append(edad)
-        fechaDeNacimientoLista.append(fechaDeNacimiento)
-        profesionLista.append(profesion)
-        montoLista.append(monto)
-        fechaDeclararLista.append(fechaDeclarar)
-        origenLista.append(origen)
-       
-        # Limpiar el formulario después de registrar los datos
-        frontend.limpiar_formulario()
+    if datos:
+        dniLista.append(datos[0])
+        apellidoLista.append(datos[1])
+        nombreLista.append(datos[2])
+        edadLista.append(datos[3])
+        fechaDeNacimientoLista.append(datos[4])
+        profesionLista.append(datos[5])
+        montoLista.append(datos[6])
+        fechaDeclararLista.append(datos[7])
+        origenLista.append(datos[8])
+        bienesArgentinasLista.append(datos[9])
+        bienesExterioresLista.append(datos[10])
+    else:
+        print("No se registraron datos.")
 
-frontend.boton_enviar.config(command=registrardatos)
-frontend.configurar_boton_mostrar(ver_datos.mostrar_datos, dniLista, apellidoLista, nombreLista, edadLista, fechaDeNacimientoLista, profesionLista, montoLista, fechaDeclararLista, origenLista)
-frontend.agregar_boton_salir()
+def main():
+    frontend.boton_enviar.config(command=registrar_datos)
+    frontend.configurar_boton_mostrar_datos()
+    frontend.agregar_boton_salir()
+    frontend.ventana.mainloop()
 
-frontend.ventana.mainloop()
+if __name__ == "__main__":
+    main()

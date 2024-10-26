@@ -1,8 +1,29 @@
-import frontend
-from listas import dniLista, apellidoLista, nombreLista, edadLista, fechaDeNacimientoLista, profesionLista, montoLista, fechaDeclararLista, origenLista, bienesArgentinasLista, bienesExterioresLista
+import frontend.interfaz as interfaz
+from listas import (
+    dniLista,
+    apellidoLista,
+    nombreLista,
+    edadLista,
+    fechaDeNacimientoLista,
+    profesionLista,
+    montoLista,
+    fechaDeclararLista,
+    origenLista,
+    bienesArgentinasLista,
+    bienesExterioresLista,
+)
 
 def registrar_datos():
-    datos = frontend.enviar_datos()
+    """
+    Registra los datos de las entradas y los checkboxes en las listas
+    correspondientes.
+    """
+    datos = interfaz.enviar_datos(
+        interfaz.entradas,
+        interfaz.variables_bienes_argentina,
+        interfaz.variables_bienes_exterior,
+    )
+
     if datos:
         dniLista.append(datos[0])
         apellidoLista.append(datos[1])
@@ -19,10 +40,15 @@ def registrar_datos():
         print("No se registraron datos.")
 
 def main():
-    frontend.boton_enviar.config(command=registrar_datos)
-    frontend.configurar_boton_mostrar_datos()
-    frontend.agregar_boton_salir()
-    frontend.ventana.mainloop()
+    """
+    Función principal del programa. Inicializa la interfaz gráfica, configura el botón
+    de enviar para que llame a la función registrar_datos, y muestra la ventana principal
+    en la pantalla.
+    """
+    ventana, boton_enviar = interfaz.inicializar_interfaz()
+    boton_enviar.config(command=registrar_datos)
+    ventana.mainloop()
+
 
 if __name__ == "__main__":
     main()

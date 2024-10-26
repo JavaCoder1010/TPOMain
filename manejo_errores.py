@@ -3,6 +3,29 @@ from tkinter import messagebox
 from datetime import datetime
 
 def validar_datos(dni, nombre, apellido, edad, fechaDeNacimiento, profesion, monto, fechaDeclarar, origen, bienes_argentinas, bienes_exteriores):
+    """
+    Valida los datos de entrada del formulario y muestra advertencias si hay errores.
+
+    La función verifica la validez de cada campo de entrada, utilizando funciones de validación específicas para el DNI, 
+    cadenas de texto, edades, fechas y montos. Si algún campo no es válido, se muestra un mensaje de advertencia y se 
+    interrumpe la validación. Si todos los campos son válidos, se formatean y agrupan en una lista para su registro.
+
+    Args:
+        dni (str): El DNI del usuario, debe ser un número de 7 a 9 dígitos.
+        nombre (str): El nombre del usuario, debe ser una cadena de texto válida.
+        apellido (str): El apellido del usuario, debe ser una cadena de texto válida.
+        edad (str): La edad del usuario, debe ser un número entre 18 y 100.
+        fechaDeNacimiento (str): La fecha de nacimiento en formato 'dd-mm-aaaa'.
+        profesion (str): La profesión del usuario, debe ser una cadena de texto válida.
+        monto (str): El monto, debe ser un número.
+        fechaDeclarar (str): La fecha de declaración en formato 'dd-mm-aaaa'.
+        origen (str): El origen de los fondos, debe ser una cadena de texto válida.
+        bienes_argentinas (list): Lista de estados de checkboxes de bienes en Argentina.
+        bienes_exteriores (list): Lista de estados de checkboxes de bienes en el exterior.
+
+    Returns:
+        list: Una lista de datos validados si todos los campos son válidos, None en caso contrario.
+    """
     if not validaciones.es_dni_valido(dni):
         messagebox.showwarning("Error", "El DNI debe ser un número de 7 a 9 dígitos.")
         return None

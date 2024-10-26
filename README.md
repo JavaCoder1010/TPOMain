@@ -23,14 +23,14 @@ project/
 ├── frontend/
 │   ├── interfaz.py                 # Contendrá la lógica para inicializar la ventana principal
 │   ├── campos.py                   # Funciones para crear los campos de entrada
-│   ├── checkboxes.py               # Funciones para crear los checkboxes
-│   ├── botones.py                  # Funciones para crear los botones
+│   ├── checkboxes.py              # Funciones para crear los checkboxes
+│   ├── botones.py                 # Funciones para crear los botones
 │
-├── listas.py                       # Contiene las listas globales
-├── manejo_errores.py               # Archivo de manejo de errores
-├── limpiar.py                      # Funciones para limpiar el formulario
-├── ver_datos.py                    # Funciones para visualizar los datos
-└── main.py                         # Archivo principal
+├── listas.py                      # Contiene las listas globales
+├── manejo_errores.py             # Archivo de manejo de errores
+├── limpiar.py                    # Funciones para limpiar el formulario
+├── ver_datos.py                  # Funciones para visualizar los datos
+└── main.py                       # Archivo principal
 
 ## Alumnos
 

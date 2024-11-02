@@ -27,6 +27,7 @@ def agregar_boton_salir(ventana):
     boton_salir = tk.Button(ventana, text="Salir", command=ventana.destroy)
     boton_salir.grid(row=11, column=1, pady=10)
 
+
 def accion_mostrar_datos():
     mostrar_datos(
         dniLista,
@@ -41,3 +42,4 @@ def accion_mostrar_datos():
         bienes_arg_lista,
         bienes_ext_lista
     )
+

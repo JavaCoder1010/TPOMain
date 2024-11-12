@@ -1,13 +1,9 @@
 import tkinter as tk
-
+from tkinter import ttk
 
 def crear_campos_entrada(ventana, entradas):
     """
-    Crea los campos de entrada para el formulario y los agrega a la ventana principal.
-
-    Args:
-        ventana (tk.Tk): La ventana principal de la interfaz.
-        entradas (list): La lista que se utiliza para almacenar los EntryField de Tkinter.
+    Crea los campos de entrada para el formulario.
     """
     labels = [
         "DNI:",
@@ -15,21 +11,19 @@ def crear_campos_entrada(ventana, entradas):
         "Nombre:",
         "Edad:",
         "Fecha de Nacimiento (dd-mm-aaaa):",
-        "Profesión:",
         "Monto:",
         "Fecha de Declaración (dd-mm-aaaa):",
         "Origen de los fondos:",
     ]
-
-    i = 0
-
-    for label in labels:
+    
+    print("\nCreando campos de entrada:")
+    for i, label in enumerate(labels):
+        print(f"Creando campo {i}: {label}")
         etiqueta = tk.Label(ventana, text=label, anchor=tk.E, width=30)
         etiqueta.grid(row=i, column=0, sticky=tk.E)
-
         entry = tk.Entry(ventana, width=30)
         entry.grid(row=i, column=1, padx=5, pady=5)
-
         entradas.append(entry)
-
-        i = i + 1
+        print(f"Campo {i} creado")
+    
+    return len(labels)

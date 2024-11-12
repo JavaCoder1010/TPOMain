@@ -1,1 +1,1 @@
-import frontend.interfaz as interfaz
+from . import interfaz

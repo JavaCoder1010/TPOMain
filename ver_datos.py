@@ -178,11 +178,15 @@ def generar_estadistica():
     cantidad = len(dniLista)
     datos_texto = (
         f"La edad máxima registrada es {encontrarmax(edadLista)}\n"
-        f"La edad minima registrada es {encontrarmin(edadLista)}\n"
+        f"La edad mínima registrada es {encontrarmin(edadLista)}\n"
         f"El promedio de edades regsitradas es de {promedioedades(edadLista)}\n"
+        f"El monto máximo registrado es {encontrarmax(montoLista)}\n"
+        f"El monto mínimo es {encontrarmin(montoLista)}\n"
+        f"El promedio de montos regsitrados es de {promedioedades(montoLista)}\n"
         f"La fecha registrada más lejana es {encontrarmin(fechaDeclararLista)}\n"
-        f"La cantidad de personas registradas es {cantidad}",
-    )
+        f"La fecha registrada más cercana es {encontrarmax(fechaDeclararLista)}\n"  
+        f"La cantidad de personas registradas es {cantidad}",  
+        )
 
     text_area.insert(tk.END, datos_texto)
     text_area.pack(padx=10, pady=10)

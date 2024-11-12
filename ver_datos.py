@@ -13,6 +13,25 @@ from listas import (
     bienesArgentinasLista,
     bienesExterioresLista
 )
+def porcentajeDeBienesArgentinos(bienesArgentinasLista, bienesExterioresLista):
+    bienesArgentinos = bienesArgentinasLista[0].count(True)
+    bienesExteriores = bienesExterioresLista[0].count(True)
+    print(bienesArgentinasLista)
+    bienestotales = bienesExteriores + bienesArgentinos
+    print("Estos son los bienes lista", bienesArgentinos)
+    if bienestotales == 0:
+        return 0  # Para evitar división por cero
+    porcentaje_argentino = (bienesArgentinos / bienestotales) * 100
+    return porcentaje_argentino
+
+def porcentajeDeBienesExtranjeros(bienesArgentinasLista, bienesExterioresLista):
+    bienesArgentinos = bienesArgentinasLista[0].count(True)
+    bienesExteriores = bienesExterioresLista[0].count(True)
+    bienestotales = bienesExteriores + bienesArgentinos
+    if bienestotales == 0:
+        return 0  # Para evitar división por cero
+    porcentaje_exterior = (bienesExteriores / bienestotales) * 100
+    return porcentaje_exterior
 
 def mostrar_datos(dniLista, apellidoLista, nombreLista, edadLista, 
                  fechaDeNacimientoLista, profesionLista, montoLista, 
@@ -46,6 +65,7 @@ def mostrar_datos(dniLista, apellidoLista, nombreLista, edadLista,
             f" Monto: {montoLista[i]}\n"
             f" Fecha Declarar: {fechaDeclararLista[i]}\n"
             f" Origen: {origenLista[i]}\n"
+            f" Posee {porcentajeDeBienesArgentinos(bienesArgentinasLista, bienesExterioresLista)}% de bienes en argentina y {porcentajeDeBienesExtranjeros(bienesArgentinasLista, bienesExterioresLista)}% en el exterior.\n"
         )
 
         
@@ -122,6 +142,7 @@ def promedioedades(edadLista):
     promedio = (suma/len(edadLista))
     return promedio
 
+
 def generar_estadistica():
     ventana_informe = tk.Toplevel()
     ventana_informe.title("Estadisticas")
@@ -132,7 +153,7 @@ def generar_estadistica():
         f"La edad minima registrada es {encontrarmin(edadLista)}\n"
         f"El promedio de edades regsitradas es de {promedioedades(edadLista)}\n"
         f"La fecha registrada más lejana es {encontrarmin(fechaDeclararLista)}\n" 
-        f"La cantidad de personas registradas es {cantidad}", 
+        f"La cantidad de personas registradas es {cantidad}",  
         )
 
     text_area.insert(tk.END, datos_texto)

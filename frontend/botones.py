@@ -11,17 +11,17 @@ from listas import (
     fechaDeclararLista,
     origenLista,
     bienesArgentinasLista as bienes_arg_lista,
-    bienesExterioresLista as bienes_ext_lista
+    bienesExterioresLista as bienes_ext_lista,
 )
+
 
 def configurar_boton_mostrar_datos(ventana):
     # Crear el botón
     boton_mostrar = tk.Button(
-        ventana,
-        text="Mostrar Datos",
-        command=accion_mostrar_datos
+        ventana, text="Mostrar Datos", command=accion_mostrar_datos
     )
     boton_mostrar.grid(row=10, column=1, pady=10)
+
 
 def agregar_boton_salir(ventana):
     boton_salir = tk.Button(ventana, text="Salir", command=ventana.destroy)
@@ -40,6 +40,5 @@ def accion_mostrar_datos():
         fechaDeclararLista,
         origenLista,
         bienes_arg_lista,
-        bienes_ext_lista
+        bienes_ext_lista,
     )
-

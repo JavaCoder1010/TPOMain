@@ -13,6 +13,7 @@ from listas import (
     bienesExterioresLista,
 )
 
+
 def registrar_datos():
     """
     Registra los datos de las entradas y los checkboxes en las listas
@@ -38,6 +39,7 @@ def registrar_datos():
         bienesExterioresLista.append(datos[10])
     else:
         print("No se registraron datos.")
+
 
 def main():
     """

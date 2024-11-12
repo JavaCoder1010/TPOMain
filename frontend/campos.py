@@ -1,5 +1,6 @@
 import tkinter as tk
 
+
 def crear_campos_entrada(ventana, entradas):
     """
     Crea los campos de entrada para el formulario y los agrega a la ventana principal.

@@ -1,5 +1,6 @@
 import tkinter as tk
 
+
 def crear_checkboxes(ventana, variables_bienes_argentina, variables_bienes_exterior):
     """
     Crea los checkboxes para los bienes en Argentina y en el exterior

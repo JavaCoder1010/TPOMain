@@ -15,27 +15,39 @@ from listas import (
 )
 
 
-def porcentajeDeBienesArgentinos(bienesArgentinasLista, bienesExterioresLista):
-    bienesArgentinos = bienesArgentinasLista[0].count(True)
-    bienesExteriores = bienesExterioresLista[0].count(True)
-    print(bienesArgentinasLista)
+def porcentajeDeBienesArgentinos(bienesArgentinasLista, bienesExterioresLista, indice):
+    """
+    Calcula el porcentaje de bienes en Argentina para un registro específico.
+    
+    Args:
+        bienesArgentinasLista (list): Lista de bienes en Argentina
+        bienesExterioresLista (list): Lista de bienes en el exterior
+        indice (int): Índice del registro actual
+    """
+    bienesArgentinos = bienesArgentinasLista[indice].count(True)
+    bienesExteriores = bienesExterioresLista[indice].count(True)
     bienestotales = bienesExteriores + bienesArgentinos
-    print("Estos son los bienes lista", bienesArgentinos)
+    
     if bienestotales == 0:
         return 0  # Para evitar división por cero
+    
     porcentaje_argentino = (bienesArgentinos / bienestotales) * 100
     return porcentaje_argentino
 
 
-def porcentajeDeBienesExtranjeros(bienesArgentinasLista, bienesExterioresLista):
-    bienesArgentinos = bienesArgentinasLista[0].count(True)
-    bienesExteriores = bienesExterioresLista[0].count(True)
+def porcentajeDeBienesExtranjeros(bienesArgentinasLista, bienesExterioresLista, indice):
+    """
+    Calcula el porcentaje de bienes en el exterior para un registro específico.
+    """
+    bienesArgentinos = bienesArgentinasLista[indice].count(True)
+    bienesExteriores = bienesExterioresLista[indice].count(True)
     bienestotales = bienesExteriores + bienesArgentinos
+    
     if bienestotales == 0:
         return 0  # Para evitar división por cero
+    
     porcentaje_exterior = (bienesExteriores / bienestotales) * 100
     return porcentaje_exterior
-
 
 def mostrar_datos(
     dniLista,
@@ -51,11 +63,9 @@ def mostrar_datos(
     bienes_ext_lista,
 ):
     """
-    Muestra los datos registrados en una nueva ventana, formateados de manera
-    legible. Si no hay datos registrados, muestra un mensaje de advertencia.
+    Muestra los datos registrados en una nueva ventana.
     """
-
-    if not dniLista:  # Si no hay datos registrados
+    if not dniLista:
         messagebox.showinfo("Sin datos", "No hay datos registrados para mostrar.")
         return
 
@@ -65,6 +75,9 @@ def mostrar_datos(
     datos_texto = ""
     lista_datos_texto = []
     for i in range(len(dniLista)):
+        # Calculamos los porcentajes para este registro específico
+        porcentaje_arg = porcentajeDeBienesArgentinos(bienes_arg_lista, bienes_ext_lista, i)
+        porcentaje_ext = porcentajeDeBienesExtranjeros(bienes_arg_lista, bienes_ext_lista, i)
 
         datos_texto = (
             f"\nRegistro {i+1}:\n"
@@ -77,7 +90,7 @@ def mostrar_datos(
             f" Monto: {montoLista[i]}\n"
             f" Fecha Declarar: {fechaDeclararLista[i]}\n"
             f" Origen: {origenLista[i]}\n"
-            f" Posee {porcentajeDeBienesArgentinos(bienesArgentinasLista, bienesExterioresLista)}% de bienes en argentina y {porcentajeDeBienesExtranjeros(bienesArgentinasLista, bienesExterioresLista)}% en el exterior.\n"
+            f" Posee {porcentaje_arg:.1f}% de bienes en argentina y {porcentaje_ext:.1f}% en el exterior.\n"
         )
 
         lista_datos_texto.append(datos_texto)

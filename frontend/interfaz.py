@@ -63,20 +63,10 @@ def enviar_datos(entradas, variables_bienes_argentina, variables_bienes_exterior
     """
     Recolecta los datos de las entradas y los checkboxes, y los valida.
     """
-    # Depuración: imprimir todos los valores
-    print("\nValores de entrada:")
-    print("Cantidad de entradas:", len(entradas))
-    for i, entrada in enumerate(entradas):
-        if isinstance(entrada, tk.Entry):
-            print(f"Entrada {i}: {entrada.get()}")
-        else:
-            print(f"Entrada {i}: {entrada}")
-    
     datos_formulario = []
     
     # DNI
     dni = entradas[0].get().strip() if isinstance(entradas[0], tk.Entry) else ""
-    print("DNI recolectado:", dni)
     datos_formulario.append(dni)
     
     # Apellido
@@ -118,17 +108,6 @@ def enviar_datos(entradas, variables_bienes_argentina, variables_bienes_exterior
     bienes_exteriores = []
     for var in variables_bienes_exterior:
         bienes_exteriores.append(var.get())
-
-    print("\nDatos recolectados:")
-    print("DNI:", dni)
-    print("Apellido:", apellido)
-    print("Nombre:", nombre)
-    print("Edad:", edad)
-    print("Fecha Nacimiento:", fecha_nac)
-    print("Monto:", monto)
-    print("Fecha Declarar:", fecha_dec)
-    print("Origen:", origen)
-    print("Profesión seleccionada:", profesion_var.get() if hasattr(profesion_var, 'get') else "No disponible")
 
     # Validar los datos
     datos_validos = validar_datos(

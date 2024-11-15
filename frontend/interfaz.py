@@ -12,9 +12,9 @@ Variables globales para almacenar entradas y checkboxes en la interfaz.
 Estas variables se definen fuera de la función inicializar_interfaz para que
 las funciones manejar_evento_enviar y limpiar_formulario puedan acceder a ellas.
 """
-entradas = []
-variables_bienes_argentina = []
-variables_bienes_exterior = []
+entradas: list[tk.Entry | tk.StringVar] = []
+variables_bienes_argentina: list[tk.BooleanVar] = []
+variables_bienes_exterior: list[tk.BooleanVar] = []
 
 
 def inicializar_interfaz():

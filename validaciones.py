@@ -110,7 +110,6 @@ def es_dni_valido(dni):
 
 
 def es_string_valido(campo):
-    # Verificar si el campo está vacío o contiene solo espacios en blanco
     """
     Verifica si un campo de texto es válido.
 
@@ -124,7 +123,6 @@ def es_string_valido(campo):
     if es_vacio:
         return False
 
-    # Verificar si el campo es de tipo string
     es_string = False
     if type(campo) == str:
         es_string = True
@@ -159,6 +157,12 @@ def es_string_valido(campo):
         "X",
         "Y",
         "Z",
+        "Á",
+        "É",
+        "Í",
+        "Ó",
+        "Ú",
+        " "
     ]
     letras_minusculas = [
         "a",
@@ -188,6 +192,11 @@ def es_string_valido(campo):
         "x",
         "y",
         "z",
+        "á",
+        "é",
+        "í",
+        "ó",
+        "ú",
     ]
 
     # Verificar que todos los caracteres sean letras
@@ -239,17 +248,83 @@ def es_edad_valida(edad):
     if not es_numero:
         return False
 
-    # Convertir la edad a entero manualmente
     edad_entero = 0
     for caracter in edad:
-        edad_entero = edad_entero * 10  # Desplazamos el dígito
-        for i, numero in enumerate(numeros):
-            if caracter == numero:
+        edad_entero = edad_entero * 10
+        for i in range(len(numeros)):
+            if caracter == numeros[i]:
                 edad_entero += i
                 break
 
-    # Validar el rango de edad
     if edad_entero < 18 or edad_entero > 100:
         return False
 
     return True
+
+def convertir_a_entero(string_numero):
+    """
+    Convierte un string numérico a entero sin usar int()
+    
+    Args:
+        string_numero (str): String que contiene un número
+        
+    Returns:
+        int: Número entero convertido
+    """
+    numeros = ["0", "1", "2", "3", "4", "5", "6", "7", "8", "9"]
+    resultado = 0
+    
+    for digito in string_numero:
+        resultado *= 10
+        for i in range(len(numeros)):
+            if digito == numeros[i]:
+                resultado += i
+                break
+                
+    return resultado
+
+def es_edad_coherente(fecha_nacimiento, edad_str):
+    """
+    Verifica si la edad proporcionada es coherente con la fecha de nacimiento.
+    
+    La lógica para verificar si la edad es coherente es la siguiente:
+    
+    1. Se convierte la fecha de nacimiento en una fecha datetime.
+    2. Se calcula la edad actual mediante la fecha de hoy menos la fecha de nacimiento.
+    3. Se compara la edad calculada con la edad proporcionada.
+    
+    Args:
+        fecha_nacimiento (str): Fecha de nacimiento en formato 'dd-mm-yyyy'
+        edad_str (str): Edad como string
+        
+    Returns:
+        bool: True si la edad es coherente con la fecha de nacimiento, False en caso contrario
+    """
+    
+    if not es_edad_valida(edad_str):
+        return False
+        
+    edad = convertir_a_entero(edad_str)
+    
+    if not es_fecha_valida(fecha_nacimiento):
+        return False
+    
+    componentes = separar_por_guiones(fecha_nacimiento)
+    
+    dia = convertir_a_entero(componentes[0])
+    mes = convertir_a_entero(componentes[1])
+    año_nacimiento = convertir_a_entero(componentes[2])
+    
+    hoy = datetime.today()
+    
+    edad_real = hoy.year - año_nacimiento
+    
+    if hoy.month < mes or (hoy.month == mes and hoy.day < dia):
+        edad_real -= 1
+        
+    diferencia = edad - edad_real
+    if diferencia < 0:
+        diferencia = -diferencia
+    
+
+    return diferencia <= 1

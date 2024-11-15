@@ -2,6 +2,7 @@
 
 import tkinter as tk
 
+
 def limpiar_formulario(
     entry_dni,
     entry_apellido,
@@ -27,15 +28,15 @@ def limpiar_formulario(
     entry_monto.delete(0, tk.END)
     entry_fechaDeclarar.delete(0, tk.END)
     entry_origen.delete(0, tk.END)
-    
+
     # Limpiar selección de profesión
     profesion_var.set("")  # Limpia la selección del radiobutton
-    
+
     # Limpiar los checkboxes
     for var in variables_bienes_argentina:
         var.set(False)
     for var in variables_bienes_exterior:
         var.set(False)
-        
+
     # Establecer el foco en el primer campo
     entry_dni.focus_set()

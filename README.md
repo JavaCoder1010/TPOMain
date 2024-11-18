@@ -18,16 +18,17 @@ TPO es el proyecto final de la materia de "Introducción a la Algoritmia" de UAD
 
 ## Estructura del archivo
 
-- **project/**
-  - **frontend/**
+- **project/
+  - **frontend/
     - `interfaz.py`: Contendrá la lógica para inicializar la ventana principal.
-    - `campos.py`: Funciones para crear los campos de entrada.
-    - `checkboxes.py`: Funciones para crear los checkboxes.
-    - `botones.py`: Funciones para crear los botones.
-  - `listas.py`: Contiene las listas globales.
+    - `campos.py`: Contendrá las funciones para crear los campos de entrada.
+    - `checkboxes.py`: Contendrá las funciones para crear los checkboxes.
+    - `botones.py`: Contendrá las funciones para crear los botones.
+  - `listas.py`: Contendrá las listas globales.
   - `manejo_errores.py`: Archivo de manejo de errores.
-  - `limpiar.py`: Funciones para limpiar el formulario.
-  - `ver_datos.py`: Funciones para visualizar los datos.
+  - `limpiar.py`: Contendrá las funciones para limpiar el formulario.
+  - `ver_datos.py`: Contendrá las funciones para visualizar los datos.
+  - `generar_estadistica.py`: Contendrá las funciones para generar estadsticas de los datos ingresados.
   - `main.py`: Archivo principal.
 
 ## Alumnos
@@ -35,3 +36,5 @@ TPO es el proyecto final de la materia de "Introducción a la Algoritmia" de UAD
 - Menta Patricio
 - Gastón Martinez
 - Veis Andrei
+
+

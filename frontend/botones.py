@@ -16,7 +16,6 @@ from listas import (
 
 
 def configurar_boton_mostrar_datos(ventana):
-    # Crear el botón
     boton_mostrar = tk.Button(
         ventana, text="Mostrar Datos", command=accion_mostrar_datos
     )

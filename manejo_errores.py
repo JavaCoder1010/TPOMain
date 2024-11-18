@@ -44,7 +44,9 @@ def validar_datos(
         )
         return None
     elif not validaciones.es_edad_coherente(fechaDeNacimiento, edad):
-        messagebox.showwarning("Error", "La edad no coincide con la fecha de nacimiento proporcionada.")
+        messagebox.showwarning(
+            "Error", "La edad no coincide con la fecha de nacimiento proporcionada."
+        )
         return None
     elif not profesion_var.get():
         messagebox.showwarning("Error", "Por favor, seleccione una profesión.")

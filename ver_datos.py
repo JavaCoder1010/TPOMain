@@ -1,3 +1,4 @@
+from generar_estadistica import generar_estadistica
 import tkinter as tk
 from tkinter import messagebox
 from listas import (
@@ -66,9 +67,50 @@ def porcentajeDeBienesExtranjeros(bienesArgentinasLista, bienesExterioresLista, 
     return porcentaje_exterior
 
 
+def contar_bien_especifico(lista_registros, indice):
+    """
+    Cuenta cuántas veces aparece un bien específico en una lista de registros
+    """
+    cantidad = 0
+    for registro in lista_registros:
+        if registro[indice] == True:
+            cantidad = cantidad + 1
+    return cantidad
+
+
+def agregar_bien_a_conteo(conteo_bienes, nombre_bien, cantidad):
+    """
+    Agrega o actualiza la cantidad de un bien en la lista de conteo
+    """
+    if cantidad == 0:
+        return conteo_bienes
+
+    for i in range(len(conteo_bienes)):
+        if conteo_bienes[i][0] == nombre_bien:
+            conteo_bienes[i][1] = conteo_bienes[i][1] + cantidad
+            return conteo_bienes
+
+    conteo_bienes.append([nombre_bien, cantidad])
+    return conteo_bienes
+
+
+def ordenar_conteo_descendente(conteo_bienes):
+    """
+    Ordena la lista de conteo de mayor a menor cantidad
+    """
+    for i in range(len(conteo_bienes)):
+        for j in range(len(conteo_bienes) - 1 - i):
+            if conteo_bienes[j][1] < conteo_bienes[j + 1][1]:
+                temp = conteo_bienes[j]
+                conteo_bienes[j] = conteo_bienes[j + 1]
+                conteo_bienes[j + 1] = temp
+    return conteo_bienes
+
+
 def contar_activos_regularizados(bienesArgentinasLista, bienesExterioresLista):
     """
     Cuenta la frecuencia de cada activo regularizado.
+    Retorna una lista de listas donde cada elemento contiene [nombre_bien, cantidad]
     """
     bienes_nombres_arg = [
         "Moneda",
@@ -93,26 +135,19 @@ def contar_activos_regularizados(bienesArgentinasLista, bienesExterioresLista):
         "Otros bienes",
     ]
 
-    # Inicializar contadores
-    conteo_bienes = {}
+    conteo_bienes = []
 
-    # Contar bienes en Argentina
-    for i in range(len(bienesArgentinasLista)):
-        for j, bien in enumerate(bienes_nombres_arg):
-            if bienesArgentinasLista[i][j]:
-                if bien in conteo_bienes:
-                    conteo_bienes[bien] += 1
-                else:
-                    conteo_bienes[bien] = 1
+    for i in range(len(bienes_nombres_arg)):
+        nombre_bien = bienes_nombres_arg[i]
+        cantidad = contar_bien_especifico(bienesArgentinasLista, i)
+        conteo_bienes = agregar_bien_a_conteo(conteo_bienes, nombre_bien, cantidad)
 
-    # Contar bienes en el exterior
-    for i in range(len(bienesExterioresLista)):
-        for j, bien in enumerate(bienes_nombres_ext):
-            if bienesExterioresLista[i][j]:
-                if bien in conteo_bienes:
-                    conteo_bienes[bien] += 1
-                else:
-                    conteo_bienes[bien] = 1
+    for i in range(len(bienes_nombres_ext)):
+        nombre_bien = bienes_nombres_ext[i]
+        cantidad = contar_bien_especifico(bienesExterioresLista, i)
+        conteo_bienes = agregar_bien_a_conteo(conteo_bienes, nombre_bien, cantidad)
+
+    conteo_bienes = ordenar_conteo_descendente(conteo_bienes)
 
     return conteo_bienes
 
@@ -120,37 +155,31 @@ def contar_activos_regularizados(bienesArgentinasLista, bienesExterioresLista):
 def generar_ranking_profesiones(profesionLista):
     """
     Genera un ranking de profesiones ordenado por frecuencia.
-    Implementación usando solo listas y operaciones básicas.
+    Retorna una lista donde cada elemento es [profesion, cantidad]
+    ordenada de mayor a menor frecuencia.
     """
-    # Listas paralelas para profesiones únicas y sus conteos
-    profesiones_unicas = []
-    conteos = []
-    
-    # Contamos ocurrencias
+
+    ranking = []
+
     for profesion in profesionLista:
         encontrado = False
-        for i in range(len(profesiones_unicas)):
-            if profesiones_unicas[i] == profesion:
-                conteos[i] += 1
+        for i in range(len(ranking)):
+            if ranking[i][0] == profesion:
+                ranking[i][1] = ranking[i][1] + 1
                 encontrado = True
                 break
-        if not encontrado:
-            profesiones_unicas.append(profesion)
-            conteos.append(1)
-    
-    # Ordenamiento burbuja por conteos
-    n = len(profesiones_unicas)
-    for i in range(n):
-        for j in range(0, n - i - 1):
-            if conteos[j] < conteos[j + 1]:
-                conteos[j], conteos[j + 1] = conteos[j + 1], conteos[j]
-                profesiones_unicas[j], profesiones_unicas[j + 1] = profesiones_unicas[j + 1], profesiones_unicas[j]
-    
-    # Construimos el ranking final
-    ranking = []
-    for i in range(len(profesiones_unicas)):
-        ranking.append((profesiones_unicas[i], conteos[i]))
-        
+
+        if encontrado == False:
+            nueva_profesion = [profesion, 1]
+            ranking.append(nueva_profesion)
+
+    for i in range(len(ranking)):
+        for j in range(len(ranking) - 1 - i):
+            if ranking[j][1] < ranking[j + 1][1]:
+                temp = ranking[j]
+                ranking[j] = ranking[j + 1]
+                ranking[j + 1] = temp
+
     return ranking
 
 
@@ -159,10 +188,9 @@ def generar_ranking_origen(origenLista):
     Genera un ranking del origen de los fondos ordenado por frecuencia.
     Implementación sin usar diccionarios ni funciones integradas.
     """
-    # LISTAS PARALELAS PARA CONTAR
     origenes_unicos = []
     conteos = []
-    
+
     for origen in origenLista:
         encontrado = False
         for i in range(len(origenes_unicos)):
@@ -173,21 +201,22 @@ def generar_ranking_origen(origenLista):
         if not encontrado:
             origenes_unicos.append(origen)
             conteos.append(1)
-    
+
     # Ordenamiento burbuja por conteos
     n = len(origenes_unicos)
     for i in range(n):
         for j in range(0, n - i - 1):
             if conteos[j] < conteos[j + 1]:
-                # Intercambiamos tanto conteos como orígenes
                 conteos[j], conteos[j + 1] = conteos[j + 1], conteos[j]
-                origenes_unicos[j], origenes_unicos[j + 1] = origenes_unicos[j + 1], origenes_unicos[j]
-    
-    # Generamos el ranking final como lista de tuplas
+                origenes_unicos[j], origenes_unicos[j + 1] = (
+                    origenes_unicos[j + 1],
+                    origenes_unicos[j],
+                )
+
     ranking = []
     for i in range(len(origenes_unicos)):
         ranking.append((origenes_unicos[i], conteos[i]))
-    
+
     return ranking
 
 
@@ -236,7 +265,7 @@ def mostrar_datos(
     bienes_ext_lista,
 ):
     """
-    Muestra los datos registrados en una nueva ventana.
+    Muestra los datos registrados en una nueva ventana con formato simplificado.
     """
     if not dniLista:
         messagebox.showinfo("Sin datos", "No hay datos registrados para mostrar.")
@@ -245,10 +274,12 @@ def mostrar_datos(
     ventana_datos = tk.Toplevel()
     ventana_datos.title("Datos Ingresados")
 
-    datos_texto = ""
-    lista_datos_texto = []
+    ancho_etiqueta = 25
+    linea_separadora = "=" * 50
+    linea_sencilla = "-" * 40
+    lista_datos_completa = []
+
     for i in range(len(dniLista)):
-        # Calculamos los porcentajes para este registro específico
         porcentaje_arg = porcentajeDeBienesArgentinos(
             bienes_arg_lista, bienes_ext_lista, i
         )
@@ -256,23 +287,26 @@ def mostrar_datos(
             bienes_arg_lista, bienes_ext_lista, i
         )
 
-        datos_texto = (
-            f"\nRegistro {i+1}:\n"
-            f" DNI: {dniLista[i]}\n"
-            f" Apellido: {apellidoLista[i]}\n"
-            f" Nombre: {nombreLista[i]}\n"
-            f" Edad: {edadLista[i]}\n"
-            f" Fecha de Nacimiento: {fechaDeNacimientoLista[i]}\n"
-            f" Profesión: {profesionLista[i]}\n"
-            f" Monto: {montoLista[i]:,.2f}\n"
-            f" Fecha Declarar: {fechaDeclararLista[i]}\n"
-            f" Origen: {origenLista[i]}\n"
-            f" Posee {porcentaje_arg:.1f}% de bienes en argentina y {porcentaje_ext:.1f}% en el exterior.\n"
+        fecha_nacimiento = fechaDeNacimientoLista[i].strftime("%Y-%m-%d")
+        fecha_declarar = fechaDeclararLista[i].strftime("%Y-%m-%d")
+
+        datos_registro = (
+            f"\n{linea_separadora}\n"
+            f"REGISTRO {i+1}\n"
+            f"{linea_sencilla}\n"
+            f"{'DNI:':<{ancho_etiqueta}} {dniLista[i]}\n"
+            f"{'Apellido:':<{ancho_etiqueta}} {apellidoLista[i]}\n"
+            f"{'Nombre:':<{ancho_etiqueta}} {nombreLista[i]}\n"
+            f"{'Edad:':<{ancho_etiqueta}} {edadLista[i]}\n"
+            f"{'Fecha de Nacimiento:':<{ancho_etiqueta}} {fecha_nacimiento}\n"
+            f"{'Profesión:':<{ancho_etiqueta}} {profesionLista[i]}\n"
+            f"{'Monto:':<{ancho_etiqueta}} ${montoLista[i]:,.2f}\n"
+            f"{'Fecha Declarar:':<{ancho_etiqueta}} {fecha_declarar}\n"
+            f"{'Origen:':<{ancho_etiqueta}} {origenLista[i]}\n"
+            f"{'Bienes en Argentina:':<{ancho_etiqueta}} {porcentaje_arg:.1f}%\n"
+            f"{'Bienes en el Exterior:':<{ancho_etiqueta}} {porcentaje_ext:.1f}%\n"
         )
 
-        lista_datos_texto.append(datos_texto)
-
-        # Bienes en Argentina
         bienes_nombres_arg = [
             "Moneda",
             "Inmuebles",
@@ -289,11 +323,11 @@ def mostrar_datos(
         for j, bien in enumerate(bienes_nombres_arg):
             if bienes_arg_lista[i][j]:
                 if not bienes_encontrados_arg:
-                    datos_texto += " Bienes en Argentina:\n"
+                    datos_registro += "\nBienes en Argentina:\n"
+                    datos_registro += "-" * 40 + "\n"
                     bienes_encontrados_arg = True
-                datos_texto += f" - {bien}\n"
+                datos_registro += f"  • {bien}\n"
 
-        # Bienes en el exterior
         bienes_nombres_ext = [
             "Moneda extranjera",
             "Inmuebles",
@@ -304,37 +338,39 @@ def mostrar_datos(
             "Derechos y bienes intangibles",
             "Otros bienes",
         ]
-
         bienes_encontrados_ext = False
         for k, bien in enumerate(bienes_nombres_ext):
             if bienes_ext_lista[i][k]:
                 if not bienes_encontrados_ext:
-                    datos_texto += " Bienes en el exterior:\n"
+                    datos_registro += "\nBienes en el Exterior:\n"
+                    datos_registro += "-" * 40 + "\n"
                     bienes_encontrados_ext = True
-                datos_texto += f" - {bien}\n"
+                datos_registro += f"  • {bien}\n"
 
-        datos_texto += "-" * 50 + "\n\n"
+        datos_registro += f"\n{linea_separadora}\n"
+        lista_datos_completa.append(datos_registro)
 
-    # Crear y configurar el área de texto
-    text_area = tk.Text(ventana_datos, wrap=tk.WORD, width=80, height=20)
-    text_area.insert(tk.END, lista_datos_texto)
+    text_area = tk.Text(ventana_datos, wrap=tk.WORD, width=80, height=30)
+    text_area.insert(tk.END, "".join(lista_datos_completa))
     text_area.pack(padx=10, pady=10)
 
-    # Botón para cerrar
+    frame_botones = tk.Frame(ventana_datos)
+    frame_botones.pack(pady=10)
+
     boton_cerrar = tk.Button(
-        ventana_datos, text="Cerrar", command=ventana_datos.destroy
+        frame_botones, text="Cerrar", command=ventana_datos.destroy
     )
-    boton_cerrar.pack(pady=10)
+    boton_cerrar.pack(side=tk.LEFT, padx=5)
 
     boton_informe = tk.Button(
-        ventana_datos, text="Estadísticas", command=generar_estadistica
+        frame_botones, text="Estadísticas", command=generar_estadistica
     )
-    boton_informe.pack(pady=20)
+    boton_informe.pack(side=tk.LEFT, padx=5)
 
     boton_buscar = tk.Button(
-        ventana_datos, text="Buscar registro", command=buscar_registro
+        frame_botones, text="Buscar registro", command=buscar_registro
     )
-    boton_buscar.pack(pady=25)
+    boton_buscar.pack(side=tk.LEFT, padx=5)
 
 
 def encontrarmax(edadLista):
@@ -359,231 +395,6 @@ def promedioedades(edadLista):
         suma += int(edad)
     promedio = suma / len(edadLista)
     return promedio
-
-
-def generar_estadistica():
-    # 1. Crear ventana nueva para mostrar estadísticas
-    ventana_informe = tk.Toplevel()
-    ventana_informe.title("Estadísticas")
-    text_area = tk.Text(ventana_informe, wrap=tk.WORD, width=80, height=30)
-
-    # 2. Calcular cantidad de registros
-    cantidad_registros = 0
-    for dni in dniLista:
-        cantidad_registros = cantidad_registros + 1
-
-    # 3. Contar todos los bienes (Argentina y exterior) para calcular porcentajes
-    total_bienes_arg = 0
-    total_bienes_ext = 0
-
-    # 3.1 Contar bienes en Argentina para todos los registros
-    for lista_bienes in bienesArgentinasLista:
-        for bien in lista_bienes:
-            if bien == True:
-                total_bienes_arg = total_bienes_arg + 1
-
-    # 3.2 Contar bienes en el exterior para todos los registros
-    for lista_bienes in bienesExterioresLista:
-        for bien in lista_bienes:
-            if bien == True:
-                total_bienes_ext = total_bienes_ext + 1
-
-    # 3.3 Calcular porcentajes
-    total_bienes = total_bienes_arg + total_bienes_ext
-    if total_bienes > 0:
-        porcentaje_arg = (total_bienes_arg * 100) / total_bienes
-        porcentaje_ext = (total_bienes_ext * 100) / total_bienes
-    else:
-        porcentaje_arg = 0
-        porcentaje_ext = 0
-
-    # 4. Crear lista de todos los activos y contar frecuencias
-    # 4.1 Definir nombres de bienes
-    bienes_nombres_arg = [
-        "Moneda",
-        "Inmuebles",
-        "Acciones y participaciones",
-        "Títulos valores",
-        "Otros bienes muebles",
-        "Créditos",
-        "Derechos y bienes intangibles",
-        "Criptomonedas y criptoactivos",
-        "Otros bienes",
-    ]
-
-    bienes_nombres_ext = [
-        "Moneda extranjera",
-        "Inmuebles",
-        "Acciones y participaciones",
-        "Títulos valores",
-        "Otros bienes muebles",
-        "Créditos",
-        "Derechos y bienes intangibles",
-        "Otros bienes",
-    ]
-
-    # 4.2 Crear lista para almacenar [nombre_activo, cantidad]
-    conteo_activos = []
-
-    # 4.3 Contar bienes en Argentina
-    for i in range(len(bienes_nombres_arg)):
-        cantidad = 0
-        for registro in bienesArgentinasLista:
-            if registro[i] == True:
-                cantidad = cantidad + 1
-        if cantidad > 0:
-            conteo_activos.append([bienes_nombres_arg[i], cantidad])
-
-    # 4.4 Contar bienes en el exterior
-    for i in range(len(bienes_nombres_ext)):
-        cantidad = 0
-        for registro in bienesExterioresLista:
-            if registro[i] == True:
-                cantidad = cantidad + 1
-        if cantidad > 0:
-            conteo_activos.append([bienes_nombres_ext[i], cantidad])
-
-    # 4.5 Ordenar activos por cantidad (orden descendente)
-    conteo_activos_ordenados = []
-    while len(conteo_activos) > 0:
-        indice_maximo = 0
-        for i in range(len(conteo_activos)):
-            if conteo_activos[i][1] > conteo_activos[indice_maximo][1]:
-                indice_maximo = i
-        conteo_activos_ordenados.append(conteo_activos[indice_maximo])
-        conteo_activos.pop(indice_maximo)
-
-    # 5. Determinar activo más y menos común
-    if len(conteo_activos_ordenados) > 0:
-        activo_mas_comun = conteo_activos_ordenados[0]
-        activo_menos_comun = conteo_activos_ordenados[len(conteo_activos_ordenados) - 1]
-    else:
-        activo_mas_comun = ["Ninguno", 0]
-        activo_menos_comun = ["Ninguno", 0]
-
-    # 6. Contar frecuencia de profesiones
-    profesiones_conteo = []
-    for profesion in profesionLista:
-        # 6.1 Buscar si la profesión ya está en la lista
-        encontrada = False
-        for i in range(len(profesiones_conteo)):
-            if profesiones_conteo[i][0] == profesion:
-                profesiones_conteo[i][1] = profesiones_conteo[i][1] + 1
-                encontrada = True
-                break
-        # 6.2 Si no está, agregarla
-        if not encontrada:
-            profesiones_conteo.append([profesion, 1])
-
-    # 6.3 Ordenar profesiones por cantidad (orden descendente)
-    ranking_profesiones = []
-    while len(profesiones_conteo) > 0:
-        indice_maximo = 0
-        for i in range(len(profesiones_conteo)):
-            if profesiones_conteo[i][1] > profesiones_conteo[indice_maximo][1]:
-                indice_maximo = i
-        ranking_profesiones.append(profesiones_conteo[indice_maximo])
-        profesiones_conteo.pop(indice_maximo)
-
-    # 7. Contar frecuencia de orígenes de fondos
-    origenes_conteo = []
-    for origen in origenLista:
-        # 7.1 Buscar si el origen ya está en la lista
-        encontrado = False
-        for i in range(len(origenes_conteo)):
-            if origenes_conteo[i][0] == origen:
-                origenes_conteo[i][1] = origenes_conteo[i][1] + 1
-                encontrado = True
-                break
-        # 7.2 Si no está, agregarlo
-        if not encontrado:
-            origenes_conteo.append([origen, 1])
-
-    # 7.3 Ordenar orígenes por cantidad (orden descendente)
-    ranking_origen = []
-    while len(origenes_conteo) > 0:
-        indice_maximo = 0
-        for i in range(len(origenes_conteo)):
-            if origenes_conteo[i][1] > origenes_conteo[indice_maximo][1]:
-                indice_maximo = i
-        ranking_origen.append(origenes_conteo[indice_maximo])
-        origenes_conteo.pop(indice_maximo)
-
-    # 8. Construir texto de estadísticas
-    datos_texto = ""
-    datos_texto = datos_texto + "ESTADÍSTICAS GENERALES:\n"
-    datos_texto = datos_texto + "----------------------\n"
-    datos_texto = (
-        datos_texto + f"Cantidad de personas registradas: {cantidad_registros}\n\n"
-    )
-
-    datos_texto = datos_texto + "EDADES:\n"
-    datos_texto = datos_texto + f"- Edad máxima: {encontrarmax(edadLista)} años\n"
-    datos_texto = datos_texto + f"- Edad mínima: {encontrarmin(edadLista)} años\n"
-    datos_texto = (
-        datos_texto + f"- Edad promedio: {promedioedades(edadLista):.1f} años\n\n"
-    )
-
-    datos_texto = datos_texto + "MONTOS:\n"
-    datos_texto = datos_texto + f"- Monto máximo: ${encontrarmax(montoLista):,.2f}\n"
-    datos_texto = datos_texto + f"- Monto mínimo: ${encontrarmin(montoLista):,.2f}\n"
-    datos_texto = (
-        datos_texto + f"- Monto promedio: ${promedioedades(montoLista):,.2f}\n\n"
-    )
-
-    datos_texto = datos_texto + "FECHAS DE DECLARACIÓN:\n"
-    datos_texto = (
-        datos_texto + f"- Fecha más lejana: {encontrarmin(fechaDeclararLista)}\n"
-    )
-    datos_texto = (
-        datos_texto + f"- Fecha más cercana: {encontrarmax(fechaDeclararLista)}\n\n"
-    )
-
-    datos_texto = (
-        datos_texto + "BIENES TOTALES DECLARADOS DE TODOS LOS CONTRIBUYENTES:\n"
-    )
-    datos_texto = datos_texto + f"- En Argentina: {porcentaje_arg:.1f}%\n"
-    datos_texto = datos_texto + f"- En el exterior: {porcentaje_ext:.1f}%\n\n"
-
-    datos_texto = datos_texto + "ACTIVOS REGULARIZADOS:\n"
-    datos_texto = (
-        datos_texto
-        + f"- Más común: {activo_mas_comun[0]} ({activo_mas_comun[1]} veces)\n"
-    )
-    datos_texto = (
-        datos_texto
-        + f"- Menos común: {activo_menos_comun[0]} ({activo_menos_comun[1]} veces)\n\n"
-    )
-
-    datos_texto = datos_texto + "RANKING DE PROFESIONES:\n"
-    for i in range(len(ranking_profesiones)):
-        numero = i + 1
-        profesion = ranking_profesiones[i][0]
-        cantidad = ranking_profesiones[i][1]
-        datos_texto = datos_texto + f"{numero}. {profesion}: {cantidad} personas\n"
-
-    datos_texto = datos_texto + "\nRANKING DE ORIGEN DE FONDOS:\n"
-    for i in range(len(ranking_origen)):
-        numero = i + 1
-        origen = ranking_origen[i][0]
-        cantidad = ranking_origen[i][1]
-        datos_texto = datos_texto + f"{numero}. {origen}: {cantidad} registros\n"
-
-    # 9. Mostrar resultados en la ventana
-    text_area.insert(tk.END, datos_texto)
-    text_area.pack(padx=10, pady=10)
-
-    # 10. Agregar scrollbar
-    scrollbar = tk.Scrollbar(ventana_informe)
-    scrollbar.pack(side=tk.RIGHT, fill=tk.Y)
-    text_area.config(yscrollcommand=scrollbar.set)
-    scrollbar.config(command=text_area.yview)
-
-    # 11. Agregar botón para cerrar
-    boton_cerrar = tk.Button(
-        ventana_informe, text="Cerrar", command=ventana_informe.destroy
-    )
-    boton_cerrar.pack(pady=10)
 
 
 def buscar_registro():
@@ -615,41 +426,32 @@ def comparar(dnibuscado):
     Args:
         dnibuscado (str): DNI a buscar en los registros
     """
-    # 1. Crear la ventana de informe
     ventana_informe = tk.Toplevel()
     ventana_informe.title("Registros")
 
-    # 2. Crear el área de texto
     text_area = tk.Text(ventana_informe, wrap=tk.WORD, width=80, height=20)
 
-    # 3. Buscar el DNI en la lista
     encontrado = False
     indice = 0
 
-    # Buscar el índice del DNI manualmente
     for i in range(len(dniLista)):
         if dniLista[i] == dnibuscado:
             encontrado = True
             indice = i
             break
 
-    # 4. Si encontramos el DNI, procesar la información
     if encontrado:
-        # 4.1 Calcular porcentajes de bienes
         total_bienes_arg = 0
         total_bienes_ext = 0
 
-        # Contar bienes en Argentina
         for bien in bienesArgentinasLista[indice]:
             if bien:
                 total_bienes_arg = total_bienes_arg + 1
 
-        # Contar bienes en el exterior
         for bien in bienesExterioresLista[indice]:
             if bien:
                 total_bienes_ext = total_bienes_ext + 1
 
-        # Calcular porcentajes
         total_bienes = total_bienes_arg + total_bienes_ext
         if total_bienes > 0:
             porcentaje_arg = (total_bienes_arg * 100) / total_bienes
@@ -658,7 +460,6 @@ def comparar(dnibuscado):
             porcentaje_arg = 0
             porcentaje_ext = 0
 
-        # 4.2 Construir el texto con la información básica
         texto_resultado = []
         texto_resultado.append(f" DNI: {dniLista[indice]}\n")
         texto_resultado.append(f" Apellido: {apellidoLista[indice]}\n")
@@ -669,7 +470,6 @@ def comparar(dnibuscado):
         )
         texto_resultado.append(f" Profesión: {profesionLista[indice]}\n")
 
-        # Formatear el monto manualmente
         monto = montoLista[indice]
         monto_texto = ""
         monto_str = str(int(monto))
@@ -688,7 +488,6 @@ def comparar(dnibuscado):
             f" Posee {porcentaje_arg:.1f}% de bienes en argentina y {porcentaje_ext:.1f}% en el exterior.\n"
         )
 
-        # 4.3 Agregar información de bienes en Argentina
         bienes_nombres_arg = [
             "Moneda",
             "Inmuebles",
@@ -712,7 +511,6 @@ def comparar(dnibuscado):
         if not tiene_bienes_arg:
             texto_resultado.append(" Ninguno\n")
 
-        # 4.4 Agregar información de bienes en el exterior
         bienes_nombres_ext = [
             "Moneda extranjera",
             "Inmuebles",
@@ -735,24 +533,20 @@ def comparar(dnibuscado):
         if not tiene_bienes_ext:
             texto_resultado.append(" Ninguno\n")
 
-    # 5. Si no encontramos el DNI, mostrar mensaje de error
     else:
         texto_resultado = ["No se encontró el DNI ingresado."]
 
-    # 6. Insertar el texto en el área de texto
     texto_final = ""
     for linea in texto_resultado:
         texto_final = texto_final + linea
 
     text_area.insert(tk.END, texto_final)
 
-    # 7. Configurar scrollbar
     scrollbar = tk.Scrollbar(ventana_informe)
     scrollbar.pack(side=tk.RIGHT, fill=tk.Y)
     text_area.config(yscrollcommand=scrollbar.set)
     scrollbar.config(command=text_area.yview)
 
-    # 8. Agregar el área de texto y el botón de cerrar a la ventana
     text_area.pack(padx=10, pady=10)
     boton_cerrar = tk.Button(
         ventana_informe, text="Cerrar", command=ventana_informe.destroy

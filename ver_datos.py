@@ -301,7 +301,7 @@ def mostrar_datos(
             f"{'Fecha de Nacimiento:':<{ancho_etiqueta}} {fecha_nacimiento}\n"
             f"{'Profesión:':<{ancho_etiqueta}} {profesionLista[i]}\n"
             f"{'Monto:':<{ancho_etiqueta}} ${montoLista[i]:,.2f}\n"
-            f"{'Fecha Declarar:':<{ancho_etiqueta}} {fecha_declarar}\n"
+            f"{'Fecha en la que se declaró:':<{ancho_etiqueta}} {fecha_declarar}\n"
             f"{'Origen:':<{ancho_etiqueta}} {origenLista[i]}\n"
             f"{'Bienes en Argentina:':<{ancho_etiqueta}} {porcentaje_arg:.1f}%\n"
             f"{'Bienes en el Exterior:':<{ancho_etiqueta}} {porcentaje_ext:.1f}%\n"
